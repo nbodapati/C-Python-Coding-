@@ -1,13 +1,13 @@
 //This file takes in as input a 2D array of numbers.
 //Computes bag of words representation of them.
-//Alternative clustering with min-hashing and 
+//Alternative clustering with min-hashing and
 //lsh hashing
 #include<iostream>
 #include<cstdio>
 #include<cmath>
 #include<cstdlib>
 #include<vector>
-using namespace std; 
+using namespace std;
 
 int docA[100001];
 int docB[100001];
@@ -23,10 +23,10 @@ return rand()%2;
 }
 
 //define a function that takes (a,b) as inputs
-//returns a lambda function which can be stored 
-//in a auto variable. 
+//returns a lambda function which can be stored
+//in a auto variable.
 auto function_generator(int a,int b){
-   //create a lambda hash function 
+   //create a lambda hash function
    int p=100001;
    auto func=[a,b,p](int x)->int{return (a*x+b)%p;};
    return func;
@@ -62,7 +62,7 @@ void print_contents(int *a,int r,int c)
    {
    for(int j=0;j<c;j++)
       cout<<*((a+i)+j)<<"\t";
-   } 
+   }
     cout<<endl;
 }
 
@@ -73,7 +73,7 @@ void create_documents()
    {
      docA[i]=random_gen();
      docB[i]=random_gen();
-     //cout<<docA[i]<< docB[i]<<endl; 
+     //cout<<docA[i]<< docB[i]<<endl;
      if(docA[i]==1 && docB[i]==1)
        sim++;
    }
@@ -88,7 +88,7 @@ void walkdown()
       {
        first1_docA=i;
        break;
-      }   
+      }
    }
 
  for(int i=0;i<100001;i++)
@@ -97,7 +97,7 @@ void walkdown()
       {
        first1_docB=i;
        break;
-      }   
+      }
    }
 }
 
@@ -110,17 +110,17 @@ float find_similarity(int n_hash)
             sim_mat[0][i]=r_c_mat[i][first1_docA];
             sim_mat[1][i]=r_c_mat[i][first1_docB];
             cout<<sim_mat[0][i]<<sim_mat[1][i]<<endl;
-            if(sim_mat[0][i]==1 && sim_mat[1][i]==1)
-               sim++; 
+            if(sim_mat[0][i]== sim_mat[1][i])
+               sim++;
         }
-  return float(sim)/100001;  
+  return float(sim)/100001;
   }
 int main()
 {
-  create_documents(); 
+  create_documents();
   walkdown();
   create_hash_functions();
-  
+
   for(int i=0;i<100001;i++)
 {
   int *hashed=get_hash_functions(i);
