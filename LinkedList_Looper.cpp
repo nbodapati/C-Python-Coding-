@@ -4,6 +4,7 @@
 #include <sys/time.h>
 using namespace std;
 
+
 struct node{
  int value;
  struct node* next;
@@ -12,6 +13,39 @@ struct node{
    next=NULL;
 }
 };
+
+//Print the contents of a linked  list in reverse
+//order with recursion
+//make this a friend so that - can access private members.
+void reverse_with_recursion(node* header,int count){
+     if(header==NULL){
+       cout<<"-->End"<<endl;
+       return;
+     }
+    reverse_with_recursion(header->next,count);
+    cout<<header->value<<"\t";
+}
+
+//Print the contents of a linked  list in reverse
+//order with looping
+//loop to the nth node - till print happens.
+//make this a friend so that - can access private members.
+void reverse_with_looping(node* header,int count){
+     if(header==NULL){
+       cout<<"Empty list"<<endl;
+       return;
+     }
+
+     for(int out_loop=count;out_loop>0;out_loop--){
+       for(int in_loop=0;in_loop<out_loop-1;in_loop++) //go from 0-8. so header at last node.
+       {
+          header=header->next;
+       }
+       cout<<header->value<<"\t";
+     }
+     cout<<endl;
+}
+
 
 class Linkedlist_Looper
 {
@@ -34,6 +68,21 @@ public:
      loop_where=-1;
 
   }
+  //Print the contents of a linked  list in reverse
+  //order with recursion
+  //make this a friend so that - can access private members.
+  friend void reverse_with_recursion();
+  friend void reverse_with_looping();
+
+  void reverse_list(bool loop=true)
+     {
+       if(loop==true){
+         reverse_with_looping(this->head,this->count);
+       }
+       else{
+         reverse_with_recursion(this->head,this->count);
+       }
+     }
 
   void add_node(int value)
   {
@@ -186,8 +235,10 @@ for(int i=0;i<10000;i++)
   lst_looper.add_node(i+1);
  }
 
-lst_looper.connect_to_nth(5); //tail to 5th.
-lst_looper.timeit();
+//lst_looper.connect_to_nth(5); //tail to 5th.
+//lst_looper.timeit();
 
+lst_looper.reverse_list(false);//recursion
+lst_looper.reverse_list(true);//looping
 return 0;
 }
