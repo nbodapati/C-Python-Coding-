@@ -85,11 +85,14 @@ public:
         }
         header=header->next; 
       }
+      //corner cases
+      //1)One or both not present.
       if(parent1 ==NULL or parent2==NULL){
          cout<<"One or both values not present"<<endl;
          return; 
       }
-      if(parent1==head and parent2!=NULL)
+      //exchange with head node, second not adjacent
+      if(parent1==head and parent2!=parent1)
        {        
         //Exchange with first node.       
          node* next2=parent2->next->next;
@@ -100,6 +103,35 @@ public:
          head=curr2;
          parent2->next=curr1;
          curr1->next=next2;
+         return;
+       }
+ 
+      //exchange with head node, second adjacent
+      if(parent1==head and parent2==parent1)
+       {        
+        //Exchange with first node.       
+         node* next2=parent1->next->next;
+         node* next1=parent1->next;  
+         node* curr1=parent1;
+         node* curr2=parent2->next;
+
+         head=curr2;
+         curr2->next=curr1;
+         curr1->next=next2;
+         return;
+       }
+
+       //exchange between adjacent nodes.
+      if(parent1->next==parent2)
+       {        
+        node* next1=parent1->next->next;
+        node* next2=parent2->next->next;
+        node* curr1=parent1->next;
+        node* curr2=parent2->next;              
+
+         curr2->next=curr1;
+         curr1->next=next2;
+         parent1->next=curr2;
          return;
        }
 
@@ -140,7 +172,7 @@ int main()
 
   lst_swapper.print_contents();
   //now swap nodes.
-  lst_swapper.swap_nodes(45,25);
+  lst_swapper.swap_nodes(1,2);
 
   lst_swapper.print_contents();
 
@@ -158,7 +190,7 @@ int main()
 
   lst_swapper.print_contents();
   //now swap nodes.
-  lst_swapper.swap_nodes(101,25);
+  lst_swapper.swap_nodes(1,2);
 
   lst_swapper.print_contents();
   return 0;
