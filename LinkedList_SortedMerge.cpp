@@ -22,6 +22,7 @@ public:
   //Make it friend so it can access the contents of both the entities
   //Reference so that need not make copies.
   friend Linkedlist_Sorter* SortedMerge_looping(Linkedlist_Sorter&,Linkedlist_Sorter&);
+
   Linkedlist_Sorter() //default constructor.
   {
      head=NULL;
@@ -44,7 +45,7 @@ public:
       tail->next=newnode;
       tail=newnode;
     }
-}
+  }
     void print_contents(){
       node* header=head;
       while(header!=NULL)
@@ -55,7 +56,41 @@ public:
       cout<<endl;
     }
 
+  node* get_head(){
+    return this->head;
+  }
+
   };
+
+void SortedMerge_recursion(Linkedlist_Sorter** merged_list,node* head1,node* head2){
+     if(head1==NULL){
+       if(head2!=NULL){
+         cout<<head2->value<<endl;
+         (*merged_list)->add_node(head2->value);
+         SortedMerge_recursion(merged_list,head1,head2->next);
+         return;
+       }
+       if(head2==NULL){
+         if(head1!=NULL){
+           cout<<head1->value<<endl;
+           (*merged_list)->add_node(head1->value);
+           SortedMerge_recursion(merged_list,head1->next,head2);
+           return;
+         }
+       }
+
+       if(head1->value <= head2->value){
+         cout<<head1->value<<endl;
+         (*merged_list)->add_node(head1->value);
+          SortedMerge_recursion(merged_list,head1->next,head2);
+       }
+       else{
+         cout<<head2->value<<endl;
+         (*merged_list)->add_node(head2->value);
+          SortedMerge_recursion(merged_list,head1,head2->next);
+       }
+     }
+}
 
 Linkedlist_Sorter* SortedMerge_looping(Linkedlist_Sorter& slist1,Linkedlist_Sorter& slist2){
    //Use looping to run through both the lists and decide which node falls where.
@@ -111,13 +146,13 @@ int main()
     {
      lst_sorted1.add_node(i+1);
     }
-  lst_sorted1.print_contents();
+  //lst_sorted1.print_contents();
 
   for(int i=1;i<20;i=i+2)
       {
        lst_sorted2.add_node(i+1);
       }
-  lst_sorted2.print_contents();
+  //lst_sorted2.print_contents();
 
     struct timeval tv_start,tv_end;
     gettimeofday(&tv_start,NULL);
@@ -126,6 +161,14 @@ int main()
     cout<<"Time to swap_nodes in usec: "<<(unsigned int)(tv_end.tv_usec-tv_start.tv_usec)<<endl;
     cout<<"Time to swap_nodes in sec: "<<(unsigned int)(tv_end.tv_sec-tv_start.tv_sec)<<endl;
 
-    merged_list->print_contents();
+    Linkedlist_Sorter* merged_list2=new Linkedlist_Sorter();
+
+    gettimeofday(&tv_start,NULL);
+    SortedMerge_recursion(&merged_list2,lst_sorted1.get_head(),lst_sorted2.get_head());
+    gettimeofday(&tv_end,NULL);
+    cout<<"Time to swap_nodes in usec: "<<(unsigned int)(tv_end.tv_usec-tv_start.tv_usec)<<endl;
+    cout<<"Time to swap_nodes in sec: "<<(unsigned int)(tv_end.tv_sec-tv_start.tv_sec)<<endl;
+
+    merged_list2->print_contents();
   return 0;
 }
