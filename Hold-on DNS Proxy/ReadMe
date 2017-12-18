@@ -1,0 +1,18 @@
+ Algorithm:
+for hold_on in [10,15,20]:
+    start_timer()
+    send_packet()
+    sniff_packets(till end of hold-on)
+    validate_packets(){
+    check for both rtt and ttl validity
+    }
+    if(valid){
+     stop timer
+     exit program
+     }
+     else {
+     wait till hold -on;
+     move to next hold-on;
+     repeat from step -3
+     }
+     
