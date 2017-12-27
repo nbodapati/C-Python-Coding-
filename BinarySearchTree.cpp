@@ -40,6 +40,84 @@ public:
     ordered=true;
   }
 
+  int num_children(tree_node* node){
+    return int(node->left!=NULL)+int(node->right!=NULL);
+  }
+
+  tree_node* get_next_inorder(tree_node* node){
+    //gets the right node and keeps going to the left most end.
+    //next smallest in the sequence.
+    if(node==NULL){
+      return NULL;
+    }
+    if(node->left==NULL){
+       return node;
+    }
+
+    return get_next_inorder(node->left);
+  }
+
+  void delete_node(tree_node* node){
+     tree_node* parent=this->get_parent(node);
+
+     if(parent==NULL){
+       cout<<"Node doesnt exist to delete."<<endl;
+       return;
+     }
+     //if only a leaf - remove it.
+     if(node->left==NULL and node->right==NULL){
+       if(parent->left==node){
+         parent->left=NULL;
+         delete node;
+       }
+       else{
+         parent->right=NULL;
+         delete node;
+       }
+           cout<<"Node deleted!"<<endl;
+     }
+     //if it only has one child - make it the root.
+     if(num_children(node)==1){
+          if(node->right==NULL){
+            if(parent->right==node){
+              parent->right=node->left;
+              delete node;
+            }
+            else{
+              parent->left=node->left;
+              delete node;
+            }
+           cout<<"Node deleted!"<<endl;
+          }
+            else{
+              //node left is null
+              if(parent->right==node){
+                parent->right=node->right;
+                delete node;
+              }
+              else{
+                parent->left=node->right;
+                delete node;
+              }
+           cout<<"Node deleted!"<<endl;
+            }
+     }
+
+     //if both children present -find the next inorder.
+     //send the function node->right as input and get inorder node as output.
+     if(num_children(node)==2){
+       tree_node* next_inorder=get_next_inorder(node->right);
+       cout<<"Two children: next_inorder: "<<next_inorder<<endl;
+       int tmp=next_inorder->value;
+       cout<<"Deleting the next inorder"<<endl;  
+       this->delete_node(next_inorder);
+       
+       node->value=tmp;      
+       //haha - should see if this works.
+       //yes - it does!
+     }
+  }
+
   void print_tree(){
     //inorder : left->root->right
     if(this->root==NULL)
@@ -183,7 +261,7 @@ public:
       }
       if(root==current){
         cout<<"Root itself"<<endl;
-        return NULL;
+        return root;
       }
       return parent(this->root,current);
     }
@@ -209,5 +287,17 @@ for(int i=10,j=11;i>0,j<20;i=i-2,j=j+2)
   cout<<"Parent to this: "<<bst->get_parent(found)<<endl;
   found=bst->search_node(15);
   cout<<"Parent to this: "<<bst->get_parent(found)<<endl;
+
+  found=bst->search_node(2);
+  bst->delete_node(found); //try only laeves.
+  bst->print_tree();
+
+  found=bst->search_node(15);
+  bst->delete_node(found); //try only laeves.
+  bst->print_tree();
+
+  found=bst->search_node(10);
+  bst->delete_node(found); //try only laeves.
+  bst->print_tree();
   return 0;
 };
