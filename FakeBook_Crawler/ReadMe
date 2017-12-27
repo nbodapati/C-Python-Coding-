@@ -1,0 +1,3 @@
+Socket level programming is used to crawl the webpages from a website hosted on UMASS Amherst eslrv2 lab machine - called Fakebook. 
+The crawling is done in a depth-first manner and it stops when all the webpages are crawled once. 
+In the process, 5 secret flags hidden within the page content are retrieved and output to the console. 
