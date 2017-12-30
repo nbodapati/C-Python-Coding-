@@ -1,0 +1,4 @@
+Feature bagging for outlier detection
+Verification on bank note authentication dataset 
+Autoencoder in tensorflow to reduce the dimensions to 2
+Bokeh plotting to verify the results of different prediction algorithms against ground truth.
