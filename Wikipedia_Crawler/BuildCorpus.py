@@ -18,6 +18,10 @@ vocab_dict_1=defaultdict(int)
 vocab_dict_2=defaultdict(int)
 vocab_dict_3=defaultdict(int)
 
+pos_dict_2=defaultdict(int)
+pos_dict_3=defaultdict(int)
+
+
 def unigram_dict(sentence):
     #remove all stopwords,build vocab_dict_1
     global vocab_dict_1
@@ -25,31 +29,45 @@ def unigram_dict(sentence):
     for token,count in tokens_dict.items():
         if(token not in stopwords):
            vocab_dict_1[token]+=count
- 
-def bigram_dict(sentence):
+
+def bigram_pos_dict(sentence):
     #remove all stopwords,build vocab_dict_1
-    global vocab_dict_2
+    global vocab_dict_2,pos_dict_2
     tokens=sentence.split()
     tokens=[t for t in tokens if t not in stopwords]
     if(len(tokens)<2):
       return
+
+    tags=nltk.pos_tag(tokens)
     for i in range(0,len(tokens)-1):
         w1=tokens[i]
         w2=tokens[i+1]   
-        vocab_dict_2[(w1,w2)]+=1
+        vocab_dict_2[' '.join([w1,w2])]+=1
+        w1=tags[i][1]
+        w2=tags[i+1][1]
+        pos_dict_2[' '.join([w1,w2])]+=1
+       
 
-def trigram_dict(sentence):
+def trigram_pos_dict(sentence):
     #remove all stopwords,build vocab_dict_1
-    global vocab_dict_3
+    global vocab_dict_3,pos_dict_3
     tokens=sentence.split()
     tokens=[t for t in tokens if t not in stopwords]
     if(len(tokens)<3):
       return
+
+    tags=nltk.pos_tag(tokens)
     for i in range(0,len(tokens)-2):
         w1=tokens[i]
         w2=tokens[i+1]   
         w3=tokens[i+2]  
-        vocab_dict_2[(w1,w2,w3)]+=1
+        vocab_dict_3[' '.join([w1,w2,w3])]+=1
+
+        w1=tags[i][1]
+        w2=tags[i+1][1]   
+        w3=tags[i+2][1]  
+        pos_dict_3[' '.join([w1,w2,w3])]+=1
+ 
 
 def pickle_dicts():
     global vocab_dict_1,vocab_dict_2,vocab_dict_3
@@ -57,6 +75,8 @@ def pickle_dicts():
     pickle.dump(vocab_dict_1,open('unigram_vocab.pkl','wb'))    
     pickle.dump(vocab_dict_2,open('bigram_vocab.pkl','wb'))    
     pickle.dump(vocab_dict_3,open('trigram_vocab.pkl','wb'))    
+    pickle.dump(pos_dict_2,open('bigram_pos.pkl','wb'))    
+    pickle.dump(pos_dict_3,open('trigram_pos.pkl','wb'))    
     print("done with pickling..")
     return 
 
@@ -78,8 +98,8 @@ def build_dictionaries():
                  print(sentence)
                  #build the dicts
                  unigram_dict(sentence)
-                 bigram_dict(sentence)
-                 trigram_dict(sentence)
+                 bigram_pos_dict(sentence)
+                 trigram_pos_dict(sentence)
     return
     
 def main():
