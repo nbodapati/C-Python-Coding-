@@ -86,9 +86,9 @@ def predict_tree(tree,X_test,Y_test):
 
 def combined_accuracy(preds,y_test):
     global vocab
-    preds=np.array(preds)
+    preds=np.array(preds).reshape(-1,5)
     print("Preds shape: ",preds.shape)
-    #shape - TxN
+    #shape - NxT
     fpred=np.mean(preds,axis=0,keepdims=True)
     print(fpred.shape)
     preds_df=pd.DataFrame(preds)
@@ -101,7 +101,8 @@ def map_vector2sentence(vector,new_vocab):
     #vector - sparse matrix with 1s at locations of words
     #new_vocab - list of words that are used in building the features.
     new_vocab=np.array(new_vocab)
-    vector=vector.tolist() 
+    vector=(vector>0).tolist() 
+    #print(vector,new_vocab)
     selected_words=new_vocab[vector]
     sentence=' '.join(selected_words)
     print(sentence)
@@ -132,7 +133,7 @@ if __name__ =='__main__':
        preds.append(predict_tree(tree,X_test,y_test))   
    
    preds_df,cacc=combined_accuracy(preds,y_test)  
-   test_df=pd.DataFrame(get_testsentences(X_test,new_vocab))
+   test_df=pd.DataFrame(dict(sentences=get_testsentences(X_test,new_vocab),y_test=y_test))
    #preds_df=pd.concat([preds_df,test_df])
    test_df.to_csv('./TestSet.csv')
    preds_df.to_csv('./Predictions_Ensemble.csv')
