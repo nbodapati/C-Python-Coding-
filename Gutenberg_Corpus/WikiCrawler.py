@@ -69,7 +69,7 @@ for link in links:
     except Exception as e:
       print("*********************Exception**************",str(e))
     
-    if(len(Links_Base.keys())%1000==0):   
+    if(len(Links_Base.keys())%100==0):   
        pickle.dump(Knowledge_Base,open('KnowledgeBase.pkl','wb'))
        pickle.dump(Links_Base,open('LinksBase.pkl','wb'))
  
