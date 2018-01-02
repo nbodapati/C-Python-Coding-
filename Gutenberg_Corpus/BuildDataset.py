@@ -9,8 +9,11 @@ KB=pickle.load(open('KnowledgeBase.pkl','rb'))
 unigram_vocab=pickle.load(open('unigram_vocab.pkl','rb'))
 bigram_vocab=pickle.load(open('bigram_vocab.pkl','rb'))
 trigram_vocab=pickle.load(open('trigram_vocab.pkl','rb'))
-bigram_pos=pickle.load(open('bigram_pos.pkl','rb'))
-trigram_pos=pickle.load(open('trigram_pos.pkl','rb'))
+fourgram_vocab=pickle.load(open('fourgram_vocab.pkl','rb'))
+fivegram_vocab=pickle.load(open('fivegram_vocab.pkl','rb'))
+sixgram_vocab=pickle.load(open('sixgram_vocab.pkl','rb'))
+#bigram_pos=pickle.load(open('bigram_pos.pkl','rb'))
+#trigram_pos=pickle.load(open('trigram_pos.pkl','rb'))
 
 
 def sort_dicts(d):
@@ -125,27 +128,42 @@ if __name__ =='__main__':
    print_dict(KB,"KB")
 
    bigram_vocab=rectify_frequencies(bigram_vocab)
-   bigram_vocab_pos=rectify_frequencies_Pos(bigram_vocab,bigram_pos)
-   bigram_vocab=lower_keys(bigram_vocab_pos)
+   #bigram_vocab_pos=rectify_frequencies_Pos(bigram_vocab,bigram_pos)
+   bigram_vocab=lower_keys(bigram_vocab)
    bigram_vocab=sort_dicts(bigram_vocab)
-   print_dict(bigram_vocab,"Bigrams_Pos")
-
+   print_dict(bigram_vocab,"Bigrams")
    check_existence(bigram_vocab)
 
    trigram_vocab=rectify_frequencies(trigram_vocab)
-   trigram_vocab_pos=rectify_frequencies_Pos(trigram_vocab,trigram_pos)
-   trigram_vocab=lower_keys(trigram_vocab_pos)
+   #trigram_vocab_pos=rectify_frequencies_Pos(trigram_vocab,trigram_pos)
+   trigram_vocab=lower_keys(trigram_vocab)
    trigram_vocab=sort_dicts(trigram_vocab)
-   print_dict(trigram_vocab,"Trigrams_Pos")
-
+   print_dict(trigram_vocab,"Trigrams")
    check_existence(trigram_vocab)
+
+   fourgram_vocab=rectify_frequencies(fourgram_vocab)
+   fourgram_vocab=lower_keys(fourgram_vocab)
+   fourgram_vocab=sort_dicts(fourgram_vocab)
+   print_dict(fourgram_vocab,"Fourgrams")
+   check_existence(fourgram_vocab)
+
+   fivegram_vocab=rectify_frequencies(fivegram_vocab)
+   fivegram_vocab=lower_keys(fivegram_vocab)
+   fivegram_vocab=sort_dicts(fivegram_vocab)
+   print_dict(fivegram_vocab,"Fivegrams")
+   check_existence(fivegram_vocab)
+
+   sixgram_vocab=rectify_frequencies(sixgram_vocab)
+   sixgram_vocab=lower_keys(sixgram_vocab)
+   sixgram_vocab=sort_dicts(sixgram_vocab)
+   print_dict(sixgram_vocab,"Sixgrams")
+   check_existence(sixgram_vocab)
 
    #should be done at the end - the other two depend on this.
    unigram_vocab=set_frequencies(unigram_vocab)
    unigram_vocab=lower_keys(unigram_vocab)
    unigram_vocab=sort_dicts(unigram_vocab)
    print_dict(unigram_vocab,"Unigrams")
-
    check_existence(unigram_vocab)
  
    #optimal_phrases()

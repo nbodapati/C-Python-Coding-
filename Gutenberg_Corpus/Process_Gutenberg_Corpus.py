@@ -96,7 +96,7 @@ def trigram_dict(tokens_tags):
         w3=tags[i+2]  
         pos_dict_3[(w1,w2,w3)]+=1
 
-def Fourgram_dict(tokens_tags):
+def fourgram_dict(tokens_tags):
     global vocab_dict_4,pos_dict_4
     tokens,tags=list(zip(*tokens_tags))
     for i in range(0,len(tokens)-2):
@@ -113,7 +113,7 @@ def Fourgram_dict(tokens_tags):
         w4=tags[i+3]  
         pos_dict_4[(w1,w2,w3,w4)]+=1
 
-def Fivegram_dict(tokens_tags):
+def fivegram_dict(tokens_tags):
     global vocab_dict_5,pos_dict_5
     tokens,tags=list(zip(*tokens_tags))
     for i in range(0,len(tokens)-2):
@@ -132,7 +132,7 @@ def Fivegram_dict(tokens_tags):
         w5=tags[i+4]  
         pos_dict_5[(w1,w2,w3,w4,w5)]+=1
 
-def Sixgram_dict(tokens_tags):
+def sixgram_dict(tokens_tags):
     global vocab_dict_6,pos_dict_6
     tokens,tags=list(zip(*tokens_tags))
     for i in range(0,len(tokens)-2):
@@ -178,16 +178,18 @@ def build_dictionaries(tokens_tags):
     unigram_dict(tokens_tags)
     bigram_dict(tokens_tags)
     trigram_dict(tokens_tags)
-    fourgram_dict(tokens_tags)
-    fivegram_dict(tokens_tags)
-    sixgram_dict(tokens_tags)
-   
+    try:
+      fourgram_dict(tokens_tags)
+      fivegram_dict(tokens_tags)
+      sixgram_dict(tokens_tags)
+    except:
+      pass
     return
 
 if __name__ =='__main__':
-   for file_ in list_of_files:
+   for i,file_ in enumerate(list_of_files):
         text=get_text(file_)
-        print(file_)
+        print(i,file_,len(list_of_files)-i)
         for s in sentence_generator(text):
             s=preprocess_sentence(s)
             tokens=tokenize(s)
@@ -199,6 +201,5 @@ if __name__ =='__main__':
                pass
                #print(tokens_tags)  
             build_dictionaries(tokens_tags)
-
-   pickle_dicts() 
+        pickle_dicts() 
  
