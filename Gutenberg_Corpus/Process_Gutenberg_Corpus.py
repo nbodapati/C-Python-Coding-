@@ -20,6 +20,12 @@ vocab_dict_2=defaultdict(int)
 pos_dict_2=defaultdict(int)
 vocab_dict_3=defaultdict(int)
 pos_dict_3=defaultdict(int)
+vocab_dict_4=defaultdict(int)
+pos_dict_4=defaultdict(int)
+vocab_dict_5=defaultdict(int)
+pos_dict_5=defaultdict(int)
+vocab_dict_6=defaultdict(int)
+pos_dict_6=defaultdict(int)
 
 #file_0=list_of_files[-100]
 def get_text(filename):
@@ -90,6 +96,63 @@ def trigram_dict(tokens_tags):
         w3=tags[i+2]  
         pos_dict_3[(w1,w2,w3)]+=1
 
+def Fourgram_dict(tokens_tags):
+    global vocab_dict_4,pos_dict_4
+    tokens,tags=list(zip(*tokens_tags))
+    for i in range(0,len(tokens)-2):
+        w1=tokens[i]
+        w2=tokens[i+1]   
+        w3=tokens[i+2]
+        w4=tokens[i+3]  
+        vocab_dict_4[(w1,w2,w3,w4)]+=1
+
+    for i in range(0,len(tags)-2):
+        w1=tags[i]
+        w2=tags[i+1]   
+        w3=tags[i+2]
+        w4=tags[i+3]  
+        pos_dict_4[(w1,w2,w3,w4)]+=1
+
+def Fivegram_dict(tokens_tags):
+    global vocab_dict_5,pos_dict_5
+    tokens,tags=list(zip(*tokens_tags))
+    for i in range(0,len(tokens)-2):
+        w1=tokens[i]
+        w2=tokens[i+1]   
+        w3=tokens[i+2]
+        w4=tokens[i+3]  
+        w5=tokens[i+4]  
+        vocab_dict_5[(w1,w2,w3,w4,w5)]+=1
+
+    for i in range(0,len(tags)-2):
+        w1=tags[i]
+        w2=tags[i+1]   
+        w3=tags[i+2]
+        w4=tags[i+3]  
+        w5=tags[i+4]  
+        pos_dict_5[(w1,w2,w3,w4,w5)]+=1
+
+def Sixgram_dict(tokens_tags):
+    global vocab_dict_6,pos_dict_6
+    tokens,tags=list(zip(*tokens_tags))
+    for i in range(0,len(tokens)-2):
+        w1=tokens[i]
+        w2=tokens[i+1]   
+        w3=tokens[i+2]
+        w4=tokens[i+3]  
+        w5=tokens[i+4]  
+        w6=tokens[i+5]  
+        vocab_dict_6[(w1,w2,w3,w4,w5,w6)]+=1
+
+    for i in range(0,len(tags)-2):
+        w1=tags[i]
+        w2=tags[i+1]   
+        w3=tags[i+2]
+        w4=tags[i+3]  
+        w5=tags[i+4]  
+        w6=tags[i+5]  
+        pos_dict_6[(w1,w2,w3,w4,w5,w6)]+=1
+
 def pickle_dicts():
     global vocab_dict_1,vocab_dict_2,vocab_dict_3
     global pos_dict_1,pos_dict_2,pos_dict_3
@@ -98,10 +161,16 @@ def pickle_dicts():
     pickle.dump(vocab_dict_1,open('unigram_vocab.pkl','wb'))    
     pickle.dump(vocab_dict_2,open('bigram_vocab.pkl','wb'))    
     pickle.dump(vocab_dict_3,open('trigram_vocab.pkl','wb'))    
+    pickle.dump(vocab_dict_4,open('fourgram_vocab.pkl','wb'))    
+    pickle.dump(vocab_dict_5,open('fivegram_vocab.pkl','wb'))    
+    pickle.dump(vocab_dict_6,open('sixgram_vocab.pkl','wb'))    
 
     pickle.dump(pos_dict_1,open('unigram_pos.pkl','wb'))    
     pickle.dump(pos_dict_2,open('bigram_pos.pkl','wb'))    
     pickle.dump(pos_dict_3,open('trigram_pos.pkl','wb'))    
+    pickle.dump(pos_dict_4,open('fourgram_pos.pkl','wb'))    
+    pickle.dump(pos_dict_5,open('fivegram_pos.pkl','wb'))    
+    pickle.dump(pos_dict_6,open('sixgram_pos.pkl','wb'))    
     print("done with pickling..")
     return 
 
@@ -109,6 +178,10 @@ def build_dictionaries(tokens_tags):
     unigram_dict(tokens_tags)
     bigram_dict(tokens_tags)
     trigram_dict(tokens_tags)
+    fourgram_dict(tokens_tags)
+    fivegram_dict(tokens_tags)
+    sixgram_dict(tokens_tags)
+   
     return
 
 if __name__ =='__main__':
