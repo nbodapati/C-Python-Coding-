@@ -75,13 +75,14 @@ void inorder_to_bst(tree_node** root,int arr[],int start,int end){
      //start - start of array.
      //end - end of array.
      //stop -condition when start==end
-     cout<<start<<end<<endl;
+     //cout<<start<<end<<endl;
      if(start==end){
+       cout<<"Leaf..."<<endl;
        return;
      }
      int middle=(start+end)/2;
 
-      cout<<"Middle value: "<<middle<<endl;
+      cout<<"root value: "<<arr[middle]<<endl;
      //this becomes the root->value.
      *root=new tree_node(arr[middle]);
      //cout<<"Root:"<<*root<<endl;
@@ -96,12 +97,40 @@ int calculate_depth(tree_node** root){
     return 1+max(calculate_depth(&((*root)->left)),calculate_depth(&((*root)->right)));
 }
 
+int sum_tree(tree_node** root){
+  if(*root==NULL)
+     return 0;
+  return (*root)->value + sum_tree(&((*root)->left))+sum_tree(&((*root)->right));
+}
+
+void sum_k(tree_node** root,int &count,int sum,int k){
+  //count - number of paths from root to leaf with sum==k
+  //tracker of sum from root to current node - sum
+  //k - the total we are looking for.
+  if(*root==NULL){
+    return ;
+  }
+  //at leaf - do the sum check.
+  if((*root)->left==NULL and (*root)->right==NULL){
+    cout<<"Sum from root to leaf: "<<(*root)->value + sum<<endl;
+    if((*root)->value + sum ==k ){
+      count++;
+      cout<<"Current count: "<<count<<endl;
+    }
+  }
+  //in iteration - pass on cumsum and count values.
+  sum=sum+(*root)->value;
+  sum_k(&((*root)->left),count,sum,k);
+  sum_k(&((*root)->right),count,sum,k);
+
+}
+
 int main()
 {
 BST *bst=new BST();
 cout<<"BST: "<<bst<<endl;
 
-int arr[100];
+int arr[8];
 for(int i=1;i<=sizeof(arr)/sizeof(int);i++){
   arr[i-1]=i;
 }
@@ -110,6 +139,10 @@ tree_node **root=bst->get_at_root();
 inorder_to_bst(root,arr,0,sizeof(arr)/sizeof(int));
 bst->print_tree();
 cout<<"Tree depth should be: log2(n)"<<calculate_depth(root)-1<<endl;
+cout<<"sum of tree: "<<sum_tree(root)<<endl;
 
+int c=0;
+sum_k(root,c,0,66);
+cout<<"Sum_k: "<<c<<endl;
 return 0;
 };
