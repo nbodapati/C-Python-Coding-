@@ -11,13 +11,22 @@ import os
 import pickle
 
 download_folder='./Images/'
+'''
 x=pd.read_csv('./words_wnids_gloss_imagenet.csv')
 print(x.shape)
 xml_dataframe=x.dropna(how='any')
 xml_dataframe=xml_dataframe.drop(labels=['Unnamed: 0'],axis=1)
 print(xml_dataframe.shape)
 print(xml_dataframe.head())
+'''
+#For now only get the neighbors.
+neighbors=pickle.load(open('neighbors_plant.pkl','rb'))
 
+wnid_list=[]
+for d_ in neighbors:
+    wnid_list.append(d_['wnid'])
+
+print(wnid_list)
 wnids_urls_dict=defaultdict(list)
 #all those that have finite number of images.
 all_wnids=[]
@@ -37,17 +46,18 @@ downloaded_urls_map=defaultdict(str)
 #get the url.
 def map_names_urls(x):
     if(len(x)==0):
-      return  #empty url.
+      return '' #empty url.
     x=x.split()
     return x[1]#{'name':x[0],'url':x[1]}
 
 image_number=0
-for wnid in xml_dataframe['wnid']:
+for wnid in wnid_list:
     image_urls='http://www.image-net.org/api/text/imagenet.synset.geturls.getmapping?wnid=%s'%wnid
+    print("Image url..",image_urls)
     names_urls= requests.get(image_urls).content.decode('utf-8')
     names_urls=names_urls.split('\r\n')
     urls=list(map(map_names_urls,names_urls))
-
+   
     wnids_urls_dict[wnid]=urls
 
     if(len(urls)):
