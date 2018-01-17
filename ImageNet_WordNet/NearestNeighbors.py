@@ -8,10 +8,11 @@ import re
 import sys
 import time
 from scipy.spatial import distance
+import pickle
 
 word='plant'
 
-word=re.sub(r'[^a-zA-Z0-9.\s]','',word)
+word=re.sub(r'[^a-zA-Z0-9.\s]',' ',word)
 words_=word.split()
 
 word_embeddings=pd.read_csv('./word_embeddings_100d.csv',header=None)
@@ -27,6 +28,7 @@ gloss_rep=gloss_rep.drop(labels=[0],axis=1)
 #this allows for a string.
 word_rep=np.zeros((1,100))
 for word in words_:
+    #word=word.lower()
     word_rep+=word_embeddings.loc[word_embeddings['words']==word,word_embeddings.columns!='words'].as_matrix()
 
 word_rep/=len(words_)
@@ -37,11 +39,16 @@ for gloss_idx in range(gloss_rep.shape[0]):
     #print(word_rep.shape,gloss_.shape)
     cdist_=distance.cdist(word_rep,gloss_,'euclidean')
     print(cdist_)
+    #print(gloss_idx,words_wnids_gloss.loc[gloss_idx,'gloss'])
+    #print(word_rep,gloss_)
     #if closer than 0.5 - call it a neighbor.
-    if(cdist_<3.5):
+    if(cdist_<5):
         print("*************Potential neighbor:  ",words_wnids_gloss.loc[gloss_idx,'gloss'])
-        neighbors.append(words_wnids_gloss.iloc[gloss_idx,:].to_dict())
+        d=words_wnids_gloss.iloc[gloss_idx,:].to_dict()
+        d['cdist']=cdist_
+        neighbors.append(d)
     else:
         pass
         #print("Not a neighbor:  ",words_wnids_gloss.loc[gloss_idx,'gloss'])
-       
+
+pickle.dump(neighbors,open('neighbors_plant.pkl','wb'))       
