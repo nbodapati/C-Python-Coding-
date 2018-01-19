@@ -24,13 +24,13 @@ function CropFaces
             mean_nose_x,mean_nose_y;
             mean_mouth_x,mean_mouth_y];
      
-     for picture=1:5%size(T,1),
+     for picture=1:size(T,1),
          
          image_=T(picture,1).Var1{1};
          img=imread(fullfile(imageDir,image_));
          fprintf('Image file: %s',image_);
          display(size(img));
-         figure,imshow(img);
+         %figure,imshow(img);
          locations=T(picture,2:end)
          leye_x=locations.Var2; %get this in float format.
          leye_y=locations.Var3;
@@ -51,7 +51,8 @@ function CropFaces
          img=imwarp(img,tform);
          %save all the images in a cell array called imarray.
          %img2=imcrop(img,[87,38,(140-87),(105-38)]);
-         figure,imshow(img);
+         %figure,imshow(img);
          imArray{picture}=img;
      end
+     save('Aligned_Images','imArray','T');
 end
