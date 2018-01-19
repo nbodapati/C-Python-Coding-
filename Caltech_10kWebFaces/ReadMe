@@ -1,0 +1,3 @@
+To align, crop images using locations of eyes,nose and mouth x,y coordinates.
+Map the images into eigenFaces space. 
+Neutralize expressions using optical flow technique.
