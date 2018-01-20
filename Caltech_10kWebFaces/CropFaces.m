@@ -23,16 +23,19 @@ function CropFaces
             mean_reye_x,mean_reye_y;
             mean_nose_x,mean_nose_y;
             mean_mouth_x,mean_mouth_y]
-        
+     
+     ndim=64;   
+     images=zeros(size(T,1),ndim*ndim*3);
      
      for picture=1:size(T,1),
          image_=T(picture,1).Var1{1};
          img=imread(fullfile(imageDir,image_));
-         fprintf('Image file: %s\n',image_);
          
+         %ignore all non-3D images
          if(numel(size(img))~=3),
              continue
-         end    
+         end   
+         fprintf('Image file: %s %d\n',image_,picture);    
          display(size(img));
           
          %figure,imshow(img); 
@@ -53,18 +56,22 @@ function CropFaces
                  
          %Get the affine transform 
          tform=fitgeotrans(actual,means,'nonreflectivesimilarity'); %they should have ncols=2
-         img=imwarp(img,tform,'OutputView',imref2d(size(img)));
+         img=imwarp(img,tform,'OutputView',imref2d([224,224,3]));
 
          %figure,imshow(img);%imtool(img);
          %save all the images in a cell array called imarray.
          img=imcrop(img,[mean_nose_x-30,mean_nose_y-40,60,70]);
+         
          if(isempty(img)),
              fprintf('Empty..');
              continue;
          end   
-         img=imresize(img,[224,224]); %this has no effect on dim-3.
+         img=imresize(img,[ndim,ndim]); %this has no effect on dim-3.
+         imshow(img);
+         img=reshape(permute(img,[2 1,3]),[1,size(img,1)*size(img,2)*size(img,3)]);
+         images(picture,:)=img;
          
-         %{
+        %{
          ci = [112, 112,80,120)];     
          [xx,yy] = ndgrid((1:size(img,1))-ci(1),(1:size(img,2))-ci(2));
          mask = uint8((ci(3)*xx.^2 + ci(4)*yy.^2)<(ci(3)*ci(4).^2));
@@ -74,7 +81,13 @@ function CropFaces
          croppedImage(:,:,3) = img(:,:,3).*mask;
          imshow(croppedImage);
          %}
-         imArray{picture}=img;
+         %how to save to a cell array and save it at the end.
+         %imArray{picture}=img;      
      end
-     save('Aligned_Images','imArray','T','-v7.3');
+     %save('Aligned_Images','imArray','T','-v7.3');
+     csvwrite('Aligned_Images.csv',images);
+     %call eigen faces once all is constructed.
+     %fprintf('Calling EigenFaces..');
+     %images2=EigenFaces(images);
+     
 end
